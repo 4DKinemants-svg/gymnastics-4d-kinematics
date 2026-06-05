@@ -529,17 +529,118 @@
         Cancel anytime. Upgrade instantly. All plans include a 7-day trial.
       </p>
 
-      <!-- ✅ REAL STRIPE EMBED - Your actual pricing table -->
-      <stripe-pricing-table
-        pricing-table-id="prctbl_1TeYWKKRIiveigXOAxFFo6XB"
-        publishable-key="pk_test_51TeY0RKRIiveigXOXrMH5pLITGWOchNYq01KBzBPX6q5O4mnPz4DUihVxxWTwwpkGh7DB8Mdog1TrIMJcRobEVe700Ap6mq0fi">
-      </stripe-pricing-table>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;max-width:1100px;margin:0 auto;">
+
+              <div class="glass" style="border-radius:20px;padding:32px;display:flex;flex-direction:column;">
+                <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Starter</div>
+                <div style="font-size:42px;font-weight:900;margin-bottom:4px;">$0</div>
+                <div style="font-size:13px;color:var(--muted);margin-bottom:24px;">per month</div>
+                <ul style="list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:10px;flex:1;">
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> 1 video/month</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Basic AI form score</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Auto-calibration</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Free Olympic drills</li>
+                  <li style="display:flex;gap:8px;font-size:13px;color:rgba(148,163,184,0.4);"><span>&#10007;</span> Exact joint angles</li>
+                  <li style="display:flex;gap:8px;font-size:13px;color:rgba(148,163,184,0.4);"><span>&#10007;</span> 3D playback</li>
+                </ul>
+                <button onclick="handlePlanClick('free')" style="width:100%;padding:14px;border:1px solid rgba(255,255,255,0.15);background:transparent;border-radius:12px;color:var(--text);font-weight:600;font-size:14px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='transparent'">Get Started Free</button>
+              </div>
+
+              <div style="border-radius:20px;padding:32px;display:flex;flex-direction:column;position:relative;border:2px solid var(--accent);background:linear-gradient(135deg,rgba(91,141,255,0.12),rgba(99,102,241,0.06));">
+                <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);padding:4px 16px;background:var(--accent);border-radius:999px;font-size:12px;font-weight:700;">MOST POPULAR</div>
+                <div style="font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Premium</div>
+                <div style="font-size:42px;font-weight:900;margin-bottom:4px;">$19.99</div>
+                <div style="font-size:13px;color:var(--muted);margin-bottom:24px;">per month</div>
+                <ul style="list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:10px;flex:1;">
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Unlimited videos</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Full 4D replay</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Exact joint angles</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Advanced AI scoring</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Hip + shoulder tracking</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Session history</li>
+                </ul>
+                <button onclick="handlePlanClick('premium')" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;">Start Premium &#8594;</button>
+              </div>
+
+              <div class="glass" style="border-radius:20px;padding:32px;display:flex;flex-direction:column;">
+                <div style="font-size:11px;color:#a78bfa;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Coach</div>
+                <div style="font-size:42px;font-weight:900;margin-bottom:4px;">$49.99</div>
+                <div style="font-size:13px;color:var(--muted);margin-bottom:24px;">per month</div>
+                <ul style="list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:10px;flex:1;">
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Multi-athlete tracking</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Progress reports</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Joint movement analysis</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Coaching feedback tools</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> All Premium features</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> AI form summaries</li>
+                </ul>
+                <button onclick="handlePlanClick('coach')" style="width:100%;padding:14px;border:1px solid rgba(167,139,250,0.5);background:transparent;border-radius:12px;color:#a78bfa;font-weight:600;font-size:14px;cursor:pointer;" onmouseover="this.style.background='rgba(167,139,250,0.1)'" onmouseout="this.style.background='transparent'">Start Coach Plan &#8594;</button>
+              </div>
+
+              <div class="glass" style="border-radius:20px;padding:32px;display:flex;flex-direction:column;border:1px solid rgba(251,191,36,0.3);">
+                <div style="font-size:11px;color:#fbbf24;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;">Studio &amp; Gym</div>
+                <div style="font-size:42px;font-weight:900;margin-bottom:4px;">$149.99</div>
+                <div style="font-size:13px;color:var(--muted);margin-bottom:24px;">per month</div>
+                <ul style="list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:10px;flex:1;">
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Kiosk mode (iPad&#8594;TV)</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Team athlete seats</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Facility-wide tracking</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Custom onboarding</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> All Coach features</li>
+                  <li style="display:flex;gap:8px;font-size:13px;"><span style="color:var(--success);">&#10003;</span> Dedicated dashboard</li>
+                </ul>
+                <button onclick="handlePlanClick('studio')" style="width:100%;padding:14px;border:1px solid rgba(251,191,36,0.5);background:transparent;border-radius:12px;color:#fbbf24;font-weight:600;font-size:14px;cursor:pointer;" onmouseover="this.style.background='rgba(251,191,36,0.1)'" onmouseout="this.style.background='transparent'">Contact for Demo &#8594;</button>
+              </div>
+
+            </div>
 
       <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:24px;">
         🔒 Payments secured by Stripe • Cancel anytime • No hidden fees
       </p>
     </div>
   </section>
+
+        <!-- PLAN SIGNUP MODAL -->
+        <div id="planSignupModal" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:24px;">
+          <div class="glass slide-up" style="border-radius:24px;padding:40px;max-width:480px;width:100%;border:1px solid rgba(91,141,255,0.3);">
+            <div style="text-align:center;margin-bottom:24px;">
+              <div id="modalPlanBadge" style="display:inline-block;padding:4px 16px;background:var(--accent);border-radius:999px;font-size:12px;font-weight:700;margin-bottom:12px;">PREMIUM</div>
+              <h2 style="font-size:24px;font-weight:900;margin:0 0 8px;">Create Your Account First</h2>
+              <p style="color:var(--muted);font-size:14px;margin:0;">Sign up free then complete your subscription</p>
+            </div>
+            <form onsubmit="handleModalSignup(event)">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                <div>
+                  <label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;">First Name *</label>
+                  <input type="text" required class="form-input" placeholder="Emma" />
+                </div>
+                <div>
+                  <label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;">Last Name *</label>
+                  <input type="text" required class="form-input" placeholder="Johnson" />
+                </div>
+              </div>
+              <div style="margin-bottom:12px;">
+                <label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;">Email Address *</label>
+                <input type="email" required class="form-input" placeholder="emma@example.com" id="modalEmail" />
+              </div>
+              <div style="margin-bottom:12px;">
+                <label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;">Password *</label>
+                <input type="password" required class="form-input" placeholder="Min. 8 characters" minlength="8" />
+              </div>
+              <div style="margin-bottom:20px;">
+                <label style="display:block;font-size:12px;font-weight:600;margin-bottom:6px;">I am a...</label>
+                <select class="form-input">
+                  <option>Athlete / Parent</option>
+                  <option>Coach</option>
+                  <option>Gym Owner</option>
+                </select>
+              </div>
+              <button type="submit" id="modalSubmitBtn" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:12px;">Create Account &amp; Continue to Payment &#8594;</button>
+              <button type="button" onclick="closePlanModal()" style="width:100%;padding:12px;background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;">Cancel</button>
+            </form>
+            <p style="text-align:center;font-size:11px;color:rgba(148,163,184,0.5);margin-top:16px;">&#128274; Your payment is secured by Stripe</p>
+          </div>
+        </div>
 
   <!-- FOOTER -->
   <footer style="padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);
@@ -1376,6 +1477,69 @@
      JAVASCRIPT
 ═══════════════════════════════════════ -->
 <script>
+// ─── PLAN CLICK HANDLER ─────────────────────────────
+let selectedPlan = 'free';
+
+const STRIPE_LINKS = {
+  free: null,
+  premium: 'https://buy.stripe.com/test_4gMcN63G402ScZBdXqbsc00',
+  coach: 'https://buy.stripe.com/test_4gMbJ2gsQeXM5x9bPibsc01',
+  studio: 'https://buy.stripe.com/test_5kQ7sMa4s3f43p106Absc02',
+};
+
+const PLAN_NAMES = {
+  free: 'FREE',
+  premium: 'PREMIUM — $19.99/mo',
+  coach: 'COACH — $49.99/mo',
+  studio: 'STUDIO & GYM — $149.99/mo',
+};
+
+const PLAN_COLORS = {
+  free: 'rgba(148,163,184,0.8)',
+  premium: 'var(--accent)',
+  coach: '#a78bfa',
+  studio: '#fbbf24',
+};
+
+function handlePlanClick(plan) {
+  selectedPlan = plan;
+  if (plan === 'free') {
+    showPage('signup');
+    return;
+  }
+  const modal = document.getElementById('planSignupModal');
+  const badge = document.getElementById('modalPlanBadge');
+  const submitBtn = document.getElementById('modalSubmitBtn');
+  badge.textContent = PLAN_NAMES[plan];
+  badge.style.background = PLAN_COLORS[plan];
+  submitBtn.style.background = PLAN_COLORS[plan];
+  modal.style.display = 'flex';
+}
+
+function closePlanModal() {
+  document.getElementById('planSignupModal').style.display = 'none';
+}
+
+function handleModalSignup(e) {
+  e.preventDefault();
+  const btn = document.getElementById('modalSubmitBtn');
+  btn.textContent = 'Creating account...';
+  btn.disabled = true;
+  setTimeout(() => {
+    closePlanModal();
+    const stripeLink = STRIPE_LINKS[selectedPlan];
+    if (stripeLink) {
+      showToast('\u2713 Account created! Redirecting to payment...', 'green');
+      setTimeout(() => { window.open(stripeLink, '_blank'); }, 1000);
+    } else {
+      showToast('\u2713 Free account created!', 'green');
+      showPage('upload');
+    }
+    btn.textContent = 'Create Account & Continue to Payment \u2192';
+    btn.disabled = false;
+  }, 1500);
+}
+
 // ─── KIOSK DATA (Your exact JS) ─────────────────
 const athletes = [
   {
