@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>4D Kinematics — AI Gymnastics Form Analysis</title>
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+
+<!-- Vercel Speed Insights -->
+<script type="module">
+  import { injectSpeedInsights } from './node_modules/@vercel/speed-insights/dist/index.mjs';
+  injectSpeedInsights();
+</script>
+
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root {

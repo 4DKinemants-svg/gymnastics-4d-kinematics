@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>4D Kinematics — AI Gymnastics Form Analysis</title>
+
+<!-- ✅ YOUR REAL STRIPE PRICING TABLE SCRIPT -->
+<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+
+<!-- Vercel Speed Insights -->
+<script type="module">
+  import { injectSpeedInsights } from './node_modules/@vercel/speed-insights/dist/index.mjs';
+  injectSpeedInsights();
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg: #050712;
+    --bg-elevated: #0b0f1f;
+    --accent: #5b8dff;
+    --accent-soft: rgba(91, 141, 255, 0.15);
+    --text: #f7f8ff;
+    --muted: #9aa3c7;
+    --danger: #ff4d6a;
+    --success: #4ade80;
+    --card-border: rgba(255, 255, 255, 0.06);
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.55);
+    --transition-fast: 0.18s ease-out;
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont,
+      "SF Pro Text", "Helvetica Neue", sans-serif;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    font-family: var(--font-sans);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #101631 0, #050712 55%);
+    color: var(--text);
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .glow { box-shadow: 0 0 40px rgba(91,141,255,0.3); }
+  .glow-green { box-shadow: 0 0 30px rgba(16,185,129,0.2); }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0f172a; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+  .nav-link { color: var(--muted); transition: color 0.2s; cursor: pointer; }
+  .nav-link:hover { color: var(--text); }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .tab-btn { transition: all 0.2s; }
+  .tab-btn.active { background: var(--accent); color: #fff; }
+
+  .pulse-ring {
+    animation: pulseRing 2s cubic-bezier(0.455,0.03,0.515,0.955) infinite;
+  }
+
+  @keyframes pulseRing {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(91,141,255,0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(91,141,255,0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(91,141,255,0); }
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @keyframes slideUp {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  @keyframes scrollReel {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .slide-up { animation: slideUp 0.4s ease forwards; }
+
+  /* Reel */
+  .reel-container { overflow: hidden; position: relative; }
+  .reel-track {
+    display: flex;
+    animation: scrollReel 30s linear infinite;
+    width: fit-content;
+  }
+  .reel-track:hover { animation-play-state: paused; }
+  .reel-card {
+    flex-shrink: 0;
+    width: 280px;
+    margin-right: 20px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .reel-card:hover { transform: scale(1.05); }
+  .video-thumbnail {
+    position: relative;
+    padding-bottom: 56.25%;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.4);
+    transition: background 0.3s;
+  }
+  .reel-card:hover .play-overlay { background: rgba(0,0,0,0.6); }
+
+  /* Form inputs */
+  .form-input {
+    background: rgba(15,23,42,0.5);
+    border: 1px solid rgba(71,85,105,0.5);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: white;
+    width: 100%;
+    transition: all 0.2s;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(15,23,42,0.8);
+  }
+  .form-input::placeholder { color: #64748b; }
+
+  /* ── KIOSK STYLES ── */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    background: rgba(5, 7, 18, 0.92);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .brand {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 15px;
+  }
+  .brand span:first-child { color: var(--accent); }
+  .brand .beta {
+    margin-left: 8px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+  .ghost {
+    background: transparent;
+    border-radius: 999px;
+    border: 1px solid rgba(148,163,184,0.6);
+    color: var(--muted);
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background var(--transition-fast),
+      color var(--transition-fast), border-color var(--transition-fast);
+  }
+  .ghost:hover {
+    background: rgba(148,163,184,0.16);
+    color: var(--text);
+    border-color: rgba(148,163,184,0.9);
+  }
+  .kiosk-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 32px 32px;
+    max-width: 1120px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .kiosk-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .kiosk-header .title {
+    font-size: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .kiosk-status {
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,77,106,0.6);
+    background: rgba(255,77,106,0.08);
+    color: #fecaca;
+  }
+  .kiosk-body {
+    display: grid;
+    grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+    gap: 18px;
+  }
+  .skill-card, .coach-notes {
+    background: var(--bg-elevated);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-soft);
+    padding: 20px 22px;
+  }
+  .skill-card { display: flex; flex-direction: column; justify-content: center; }
+  .small-label {
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .skill-name { font-size: 26px; font-weight: 600; margin-bottom: 18px; }
+  .form-score {
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--success);
+    text-shadow: 0 0 16px rgba(74,222,128,0.5);
+  }
+  .coach-notes h3 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .coach-notes ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px;
+    font-size: 14px;
+  }
+  .coach-notes li {
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 6px;
+  }
+  .coach-notes li::before {
+    content: "●";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 9px;
+    transform: translateY(4px);
+  }
+  .primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--accent);
+    border-radius: 999px;
+    border: none;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: transform var(--transition-fast),
+      box-shadow var(--transition-fast);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.6);
+  }
+  .primary-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+  }
+  .lead-banner {
+    font-size: 12px;
+    color: var(--muted);
+    padding-top: 8px;
+    border-top: 1px solid rgba(148,163,184,0.24);
+  }
+
+  /* ── STRIPE PRICING TABLE OVERRIDES ── */
+  stripe-pricing-table {
+    width: 100%;
+    display: block;
+  }
+
+  @media (max-width: 840px) {
+    .kiosk-body { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     GLOBAL NAV
+═══════════════════════════════════════ -->
+<nav id="globalNav"
+  style="position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(5,7,18,0.92);
+         backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.08);">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px;height:64px;
+              display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:32px;height:32px;background:var(--accent);border-radius:8px;
+                  display:flex;align-items:center;justify-content:center;
+                  font-weight:900;font-size:13px;">4D</div>
+      <span style="font-weight:900;font-size:18px;letter-spacing:-0.5px;">Kinematics</span>
+      <span class="mono" style="padding:2px 8px;background:var(--accent-soft);
+                                border:1px solid rgba(91,141,255,0.4);border-radius:4px;
+                                font-size:11px;color:#93c5fd;">BETA</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:24px;">
+      <span class="nav-link" style="font-size:14px;" onclick="showPage('landing')">Home</span>
+      <span class="nav-link" style="font-size:14px;" onclick="showPage('signup')">Sign Up</span>
+      <span class="nav-link" style="font-size:14px;" onclick="showPage('upload')">Upload</span>
+      <span class="nav-link" style="font-size:14px;" onclick="showPage('dashboard')">Dashboard</span>
+      <span class="nav-link" style="font-size:14px;" onclick="showPage('kiosk')">Kiosk</span>
+      <span class="nav-link" style="font-size:14px;" onclick="showPage('affiliate')">Revenue</span>
+      <button onclick="showPage('signup')"
+        style="padding:8px 18px;background:var(--accent);border:none;border-radius:999px;
+               color:#fff;font-size:13px;font-weight:600;cursor:pointer;">
+        Get Started →
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     PAGE: LANDING
+═══════════════════════════════════════ -->
+<div id="page-landing" class="page active" style="padding-top:64px;">
+
+  <!-- HERO -->
+  <section style="padding:80px 24px 60px;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:80px;left:50%;transform:translateX(-50%);
+                width:500px;height:500px;background:rgba(91,141,255,0.15);
+                border-radius:50%;filter:blur(80px);pointer-events:none;"></div>
+
+    <div style="position:relative;max-width:860px;margin:0 auto;">
+      <div class="mono" style="display:inline-flex;align-items:center;gap:8px;
+                                padding:8px 16px;background:rgba(255,255,255,0.05);
+                                border:1px solid rgba(255,255,255,0.1);border-radius:999px;
+                                font-size:13px;color:#93c5fd;margin-bottom:32px;">
+        <span style="width:8px;height:8px;background:#4ade80;border-radius:50%;
+                     display:inline-block;" class="pulse-ring"></span>
+        MediaPipe • 33 Landmark Tracking • 60 FPS Analysis
+      </div>
+
+      <h1 style="font-size:clamp(40px,8vw,72px);font-weight:900;line-height:1.1;
+                 margin:0 0 24px;letter-spacing:-2px;">
+        Stop Guessing.<br/>
+        <span class="gradient-text">See Your Angles.</span>
+      </h1>
+
+      <p style="font-size:18px;color:var(--muted);max-width:600px;
+                margin:0 auto 40px;line-height:1.7;">
+        Elite biomechanics used to cost <strong style="color:var(--text);">$200/hr</strong>
+        or a <strong style="color:var(--text);">$100k Vicon lab</strong>.
+        Upload a 5-second tumble video. Get full 4D kinematic analysis in 60 seconds.
+      </p>
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:60px;">
+        <button onclick="showPage('signup')"
+          style="padding:16px 32px;background:#fff;color:#0f172a;font-weight:900;
+                 border:none;border-radius:12px;font-size:16px;cursor:pointer;
+                 box-shadow:0 0 40px rgba(91,141,255,0.3);">
+          Start Free Analysis →
+        </button>
+        <button onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})"
+          style="padding:16px 32px;background:rgba(255,255,255,0.06);
+                 border:1px solid rgba(255,255,255,0.12);color:var(--text);
+                 border-radius:12px;font-size:16px;cursor:pointer;font-weight:600;">
+          View Plans ↓
+        </button>
+      </div>
+
+      <!-- HERO CANVAS -->
+      <div style="position:relative;max-width:900px;margin:0 auto;border-radius:20px;
+                  overflow:hidden;border:1px solid rgba(255,255,255,0.1);
+                  background:#0b0f1f;height:380px;" class="glow">
+        <canvas id="heroCanvas" style="width:100%;height:100%;display:block;"></canvas>
+        <div class="glass" style="position:absolute;top:16px;left:16px;
+                                   border-radius:10px;padding:8px 14px;">
+          <div class="mono" style="font-size:11px;color:#4ade80;">● LIVE ANALYSIS</div>
+          <div style="font-size:14px;font-weight:700;">Back Handspring</div>
+        </div>
+        <div class="glass" style="position:absolute;top:16px;right:16px;
+                                   border-radius:10px;padding:8px 16px;text-align:center;">
+          <div style="font-size:28px;font-weight:900;color:#fbbf24;">87</div>
+          <div style="font-size:11px;color:var(--muted);">Form Score</div>
+        </div>
+        <div class="glass mono" style="position:absolute;bottom:12px;left:16px;
+                                        border-radius:8px;padding:4px 10px;font-size:11px;
+                                        color:#93c5fd;">
+          33 landmarks • Frame 142/240
+        </div>
+        <div class="glass mono" style="position:absolute;bottom:50px;left:30%;
+                                        border-radius:6px;padding:4px 8px;
+                                        font-size:11px;color:#f87171;">
+          L.Shoulder: 138° ⚠️
+        </div>
+        <div class="glass mono" style="position:absolute;top:80px;right:25%;
+                                        border-radius:6px;padding:4px 8px;
+                                        font-size:11px;color:#4ade80;">
+          Hip Align: ✓
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section style="padding:80px 24px;">
+    <div style="max-width:1000px;margin:0 auto;">
+      <h2 style="font-size:32px;font-weight:900;text-align:center;margin-bottom:12px;">
+        How It Works
+      </h2>
+      <p style="text-align:center;color:var(--muted);margin-bottom:48px;">
+        From phone video to professional analysis in 60 seconds
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
+        <div class="glass" style="border-radius:20px;padding:32px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">📱</div>
+          <div class="mono" style="font-size:36px;font-weight:900;
+                                   color:rgba(91,141,255,0.3);margin-bottom:8px;">01</div>
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:12px;">Upload</h3>
+          <p style="font-size:14px;color:var(--muted);line-height:1.6;">
+            Record any tumble from the side at chest height. 5–15 seconds is ideal.
+          </p>
+        </div>
+        <div class="glass" style="border-radius:20px;padding:32px;text-align:center;
+                                   border-color:rgba(91,141,255,0.3);">
+          <div style="font-size:48px;margin-bottom:12px;">🧠</div>
+          <div class="mono" style="font-size:36px;font-weight:900;
+                                   color:rgba(91,141,255,0.3);margin-bottom:8px;">02</div>
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:12px;">AI Processes</h3>
+          <p style="font-size:14px;color:var(--muted);line-height:1.6;">
+            Docker workers map 33 skeletal landmarks every frame using MediaPipe Pose.
+          </p>
+        </div>
+        <div class="glass" style="border-radius:20px;padding:32px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🎯</div>
+          <div class="mono" style="font-size:36px;font-weight:900;
+                                   color:rgba(91,141,255,0.3);margin-bottom:8px;">03</div>
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:12px;">See & Correct</h3>
+          <p style="font-size:14px;color:var(--muted);line-height:1.6;">
+            Interactive 3D skeleton shows exactly where your angles deviate from ideal.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section style="padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);
+                  border-bottom:1px solid rgba(255,255,255,0.06);
+                  background:rgba(11,15,31,0.5);">
+    <div style="max-width:900px;margin:0 auto;
+                display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;">
+      <div>
+        <div style="font-size:40px;font-weight:900;color:var(--accent);">33</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;">Skeletal Landmarks</div>
+      </div>
+      <div>
+        <div style="font-size:40px;font-weight:900;color:var(--success);">60s</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;">Analysis Time</div>
+      </div>
+      <div>
+        <div style="font-size:40px;font-weight:900;color:#a78bfa;">4D</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;">Spatial + Time</div>
+      </div>
+      <div>
+        <div style="font-size:40px;font-weight:900;color:#fbbf24;">92%</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;">Detection Accuracy</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎥 TUMBLING REEL -->
+  <section style="padding:80px 0;background:rgba(11,15,31,0.3);">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+      <h2 style="font-size:32px;font-weight:900;text-align:center;margin-bottom:12px;">
+        🎥 See It In Action
+      </h2>
+      <p style="text-align:center;color:var(--muted);margin-bottom:40px;">
+        Real athletes. Real results. Analyzed in real-time.
+      </p>
+    </div>
+    <div class="reel-container">
+      <div class="reel-track" id="reelTrack"></div>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+      <button onclick="showPage('signup')"
+        style="padding:12px 28px;background:var(--accent);border:none;border-radius:12px;
+               color:#fff;font-weight:700;font-size:15px;cursor:pointer;">
+        Upload Your Skills →
+      </button>
+    </div>
+  </section>
+
+  <!-- ✅ YOUR REAL STRIPE PRICING TABLE -->
+  <section id="pricing" style="padding:80px 24px;background:rgba(5,7,18,0.5);">
+    <div style="max-width:1200px;margin:0 auto;">
+      <h2 style="font-size:32px;font-weight:900;text-align:center;margin-bottom:12px;">
+        Choose Your Plan
+      </h2>
+      <p style="text-align:center;color:var(--muted);margin-bottom:48px;">
+        Cancel anytime. Upgrade instantly. All plans include a 7-day trial.
+      </p>
+
+      <!-- ✅ REAL STRIPE EMBED - Your actual pricing table -->
+      <stripe-pricing-table
+        pricing-table-id="prctbl_1TeYWKKRIiveigXOAxFFo6XB"
+        publishable-key="pk_test_51TeY0RKRIiveigXOXrMH5pLITGWOchNYq01KBzBPX6q5O4mnPz4DUihVxxWTwwpkGh7DB8Mdog1TrIMJcRobEVe700Ap6mq0fi">
+      </stripe-pricing-table>
+
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:24px;">
+        🔒 Payments secured by Stripe • Cancel anytime • No hidden fees
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);
+                 text-align:center;color:var(--muted);font-size:13px;">
+    <div style="margin-bottom:16px;font-weight:900;font-size:18px;color:var(--text);">
+      🤸‍♀️ 4D Kinematics
+    </div>
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;">
+      <span class="nav-link" onclick="showPage('landing')">Home</span>
+      <span class="nav-link" onclick="showPage('signup')">Sign Up</span>
+      <span class="nav-link" onclick="showPage('upload')">Upload</span>
+      <span class="nav-link" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Pricing</span>
+      <span class="nav-link" onclick="showPage('kiosk')">Kiosk</span>
+    </div>
+    <div>© 2025 4D Kinematics. AI-powered gymnastics form analysis.</div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: SIGN UP
+═══════════════════════════════════════ -->
+<div id="page-signup" class="page" style="padding-top:64px;">
+  <div style="min-height:100vh;padding:60px 24px;">
+    <div style="max-width:560px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:32px;">
+        <h1 style="font-size:36px;font-weight:900;margin-bottom:8px;">
+          Create Your Profile
+        </h1>
+        <p style="color:var(--muted);">
+          Start analyzing your form in under 60 seconds
+        </p>
+      </div>
+
+      <!-- TABS -->
+      <div class="glass" style="border-radius:14px;padding:4px;
+                                  display:flex;gap:4px;margin-bottom:24px;">
+        <button onclick="showSignupTab('athlete')" id="tab-athlete"
+          class="tab-btn active"
+          style="flex:1;padding:12px;border-radius:10px;border:none;
+                 font-weight:600;font-size:13px;cursor:pointer;color:#fff;">
+          🤸‍♀️ Athlete
+        </button>
+        <button onclick="showSignupTab('coach')" id="tab-coach"
+          class="tab-btn"
+          style="flex:1;padding:12px;border-radius:10px;border:none;
+                 font-weight:600;font-size:13px;cursor:pointer;
+                 color:var(--muted);background:transparent;">
+          👨‍🏫 Coach
+        </button>
+        <button onclick="showSignupTab('gym')" id="tab-gym"
+          class="tab-btn"
+          style="flex:1;padding:12px;border-radius:10px;border:none;
+                 font-weight:600;font-size:13px;cursor:pointer;
+                 color:var(--muted);background:transparent;">
+          🏢 Gym Owner
+        </button>
+      </div>
+
+      <!-- ATHLETE FORM -->
+      <div id="form-athlete" class="signup-form glass"
+           style="border-radius:20px;padding:32px;">
+        <form onsubmit="handleSignup(event,'athlete')">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                First Name *
+              </label>
+              <input type="text" required class="form-input" placeholder="Emma" />
+            </div>
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                Last Name *
+              </label>
+              <input type="text" required class="form-input" placeholder="Johnson" />
+            </div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Email Address *
+            </label>
+            <input type="email" required class="form-input" placeholder="emma@example.com" />
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Password *
+            </label>
+            <input type="password" required class="form-input"
+                   placeholder="Min. 8 characters" minlength="8" />
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                Age
+              </label>
+              <input type="number" class="form-input" placeholder="14" min="5" max="99" />
+            </div>
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                Skill Level
+              </label>
+              <select class="form-input">
+                <option value="">Select...</option>
+                <option>Beginner (Level 1–3)</option>
+                <option>Intermediate (Level 4–6)</option>
+                <option>Advanced (Level 7–9)</option>
+                <option>Elite (Level 10+)</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:10px;">
+              Primary Skills
+            </label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <label style="display:flex;align-items:center;gap:8px;
+                            font-size:13px;cursor:pointer;">
+                <input type="checkbox" /> Tumbling
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;
+                            font-size:13px;cursor:pointer;">
+                <input type="checkbox" /> Vault
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;
+                            font-size:13px;cursor:pointer;">
+                <input type="checkbox" /> Bars
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;
+                            font-size:13px;cursor:pointer;">
+                <input type="checkbox" /> Beam
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;
+                            font-size:13px;cursor:pointer;">
+                <input type="checkbox" /> Floor
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;
+                            font-size:13px;cursor:pointer;">
+                <input type="checkbox" /> Cheer
+              </label>
+            </div>
+          </div>
+          <label style="display:flex;align-items:flex-start;gap:8px;
+                        font-size:12px;color:var(--muted);margin-bottom:20px;cursor:pointer;">
+            <input type="checkbox" required style="margin-top:2px;" />
+            I agree to the
+            <a href="#" style="color:var(--accent);">Terms of Service</a>
+            and
+            <a href="#" style="color:var(--accent);">Privacy Policy</a>
+          </label>
+          <button type="submit"
+            style="width:100%;padding:14px;background:var(--accent);border:none;
+                   border-radius:12px;color:#fff;font-weight:700;font-size:15px;
+                   cursor:pointer;margin-bottom:16px;">
+            Create Free Account →
+          </button>
+          <div style="text-align:center;font-size:13px;color:var(--muted);">
+            Already have an account?
+            <a href="#" style="color:var(--accent);">Sign In</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- COACH FORM -->
+      <div id="form-coach" class="signup-form glass"
+           style="border-radius:20px;padding:32px;display:none;">
+        <form onsubmit="handleSignup(event,'coach')">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                First Name *
+              </label>
+              <input type="text" required class="form-input" placeholder="Sarah" />
+            </div>
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                Last Name *
+              </label>
+              <input type="text" required class="form-input" placeholder="Williams" />
+            </div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Email Address *
+            </label>
+            <input type="email" required class="form-input" placeholder="coach@example.com" />
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Password *
+            </label>
+            <input type="password" required class="form-input"
+                   placeholder="Min. 8 characters" minlength="8" />
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Coaching Certification
+            </label>
+            <select class="form-input">
+              <option value="">Select...</option>
+              <option>USAG Professional Member</option>
+              <option>USAG Safety Certified</option>
+              <option>USASF Credentialed</option>
+              <option>AAU Certified</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Affiliated Gym (Optional)
+            </label>
+            <input type="text" class="form-input"
+                   placeholder="Champion Gymnastics Academy" />
+          </div>
+          <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Number of Athletes
+            </label>
+            <select class="form-input">
+              <option>1–5</option>
+              <option>6–15</option>
+              <option>16–30</option>
+              <option>31–50</option>
+              <option>50+</option>
+            </select>
+          </div>
+          <label style="display:flex;align-items:flex-start;gap:8px;
+                        font-size:12px;color:var(--muted);margin-bottom:20px;cursor:pointer;">
+            <input type="checkbox" required style="margin-top:2px;" />
+            I agree to the Terms of Service and Privacy Policy
+          </label>
+          <button type="submit"
+            style="width:100%;padding:14px;background:#7c3aed;border:none;
+                   border-radius:12px;color:#fff;font-weight:700;font-size:15px;
+                   cursor:pointer;margin-bottom:16px;">
+            Start Coach Plan — $49.99/mo →
+          </button>
+          <div style="text-align:center;font-size:13px;color:var(--muted);">
+            Already have an account?
+            <a href="#" style="color:var(--accent);">Sign In</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- GYM FORM -->
+      <div id="form-gym" class="signup-form glass"
+           style="border-radius:20px;padding:32px;display:none;">
+        <form onsubmit="handleSignup(event,'gym')">
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Facility Name *
+            </label>
+            <input type="text" required class="form-input"
+                   placeholder="Sunrise Gymnastics Academy" />
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                Your First Name *
+              </label>
+              <input type="text" required class="form-input" placeholder="Michael" />
+            </div>
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                Your Last Name *
+              </label>
+              <input type="text" required class="form-input" placeholder="Davis" />
+            </div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Business Email *
+            </label>
+            <input type="email" required class="form-input"
+                   placeholder="owner@sunrisegym.com" />
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Phone Number *
+            </label>
+            <input type="tel" required class="form-input" placeholder="(555) 123-4567" />
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Password *
+            </label>
+            <input type="password" required class="form-input"
+                   placeholder="Min. 8 characters" minlength="8" />
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                City *
+              </label>
+              <input type="text" required class="form-input" placeholder="San Diego" />
+            </div>
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+                State *
+              </label>
+              <input type="text" required class="form-input"
+                     placeholder="CA" maxlength="2" />
+            </div>
+          </div>
+          <div style="margin-bottom:20px;">
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">
+              Facility Type *
+            </label>
+            <select required class="form-input">
+              <option value="">Select...</option>
+              <option>Gymnastics Academy</option>
+              <option>Cheer Gym</option>
+              <option>Tumbling & Trampoline</option>
+              <option>Multi-Sport Facility</option>
+              <option>Private Club</option>
+            </select>
+          </div>
+          <label style="display:flex;align-items:flex-start;gap:8px;
+                        font-size:12px;color:var(--muted);margin-bottom:20px;cursor:pointer;">
+            <input type="checkbox" required style="margin-top:2px;" />
+            I agree to the Terms of Service and Privacy Policy
+          </label>
+          <button type="submit"
+            style="width:100%;padding:14px;background:#b45309;border:none;
+                   border-radius:12px;color:#fff;font-weight:700;font-size:15px;
+                   cursor:pointer;margin-bottom:16px;">
+            Request Demo — $149.99/mo →
+          </button>
+          <div style="text-align:center;font-size:13px;color:var(--muted);">
+            Already have an account?
+            <a href="#" style="color:var(--accent);">Sign In</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Social login -->
+      <div style="margin-top:24px;">
+        <div style="position:relative;text-align:center;margin-bottom:20px;">
+          <div style="position:absolute;top:50%;left:0;right:0;
+                      height:1px;background:rgba(255,255,255,0.1);"></div>
+          <span style="position:relative;background:var(--bg);
+                       padding:0 16px;font-size:13px;color:var(--muted);">
+            Or continue with
+          </span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <button class="glass"
+            style="padding:12px;border-radius:10px;font-size:13px;
+                   font-weight:600;cursor:pointer;display:flex;
+                   align-items:center;justify-content:center;gap:8px;
+                   border:1px solid rgba(255,255,255,0.1);color:var(--text);">
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Google
+          </button>
+          <button class="glass"
+            style="padding:12px;border-radius:10px;font-size:13px;
+                   font-weight:600;cursor:pointer;display:flex;
+                   align-items:center;justify-content:center;gap:8px;
+                   border:1px solid rgba(255,255,255,0.1);color:var(--text);">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+            </svg>
+            GitHub
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: UPLOAD
+═══════════════════════════════════════ -->
+<div id="page-upload" class="page" style="padding-top:64px;">
+  <div style="min-height:100vh;padding:60px 24px;">
+    <div style="max-width:600px;margin:0 auto;">
+      <span onclick="showPage('landing')"
+        style="color:var(--accent);font-size:13px;cursor:pointer;
+               display:inline-block;margin-bottom:24px;">← Back</span>
+      <h1 style="font-size:32px;font-weight:900;margin-bottom:8px;">
+        Upload Your Tumble
+      </h1>
+      <p style="color:var(--muted);margin-bottom:32px;">
+        MP4 or MOV • Max 50MB • Side-angle at chest height works best
+      </p>
+
+      <!-- Drop Zone -->
+      <div id="uploadZone" onclick="simulateUpload()"
+        style="border:2px dashed rgba(71,85,105,0.6);border-radius:20px;
+               height:260px;display:flex;flex-direction:column;
+               align-items:center;justify-content:center;cursor:pointer;
+               transition:all 0.2s;text-align:center;padding:24px;"
+        onmouseover="this.style.borderColor='var(--accent)'"
+        onmouseout="this.style.borderColor='rgba(71,85,105,0.6)'">
+        <div style="width:64px;height:64px;background:rgba(255,255,255,0.05);
+                    border-radius:16px;display:flex;align-items:center;
+                    justify-content:center;font-size:28px;margin-bottom:16px;">⬆️</div>
+        <p style="font-weight:700;font-size:16px;margin:0 0 8px;">
+          Drop video here or click to browse
+        </p>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 16px;">
+          Simulates the full upload + AI processing flow
+        </p>
+        <div class="mono" style="font-size:11px;padding:4px 12px;
+                                  background:rgba(255,255,255,0.04);
+                                  border:1px solid rgba(255,255,255,0.08);
+                                  border-radius:999px;color:var(--muted);">
+          🆓 Free Plan — 1 analysis/month
+        </div>
+      </div>
+
+      <!-- Processing State -->
+      <div id="processingState" style="display:none;margin-top:24px;">
+        <div class="glass" style="border-radius:20px;padding:32px;text-align:center;">
+          <div style="position:relative;width:72px;height:72px;margin:0 auto 24px;">
+            <div style="position:absolute;inset:0;border:4px solid rgba(91,141,255,0.2);
+                        border-radius:50%;"></div>
+            <div style="position:absolute;inset:0;border:4px solid transparent;
+                        border-top-color:var(--accent);border-radius:50%;
+                        animation:spin 1s linear infinite;"></div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;
+                        justify-content:center;font-size:24px;">🧠</div>
+          </div>
+          <h3 style="font-size:20px;font-weight:700;margin-bottom:8px;">
+            AI Analyzing Your Form
+          </h3>
+          <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">
+            MediaPipe mapping 33 skeletal landmarks...
+          </p>
+          <div style="background:rgba(255,255,255,0.06);border-radius:999px;
+                      height:6px;margin-bottom:8px;overflow:hidden;">
+            <div id="uploadProgressBar"
+              style="background:var(--accent);height:100%;border-radius:999px;
+                     width:0%;transition:width 0.3s;"></div>
+          </div>
+          <div id="progressLabel" class="mono"
+               style="font-size:12px;color:var(--accent);">
+            Uploading to cloud... 0%
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);
+                      gap:16px;margin-top:32px;">
+            <div id="stage1" style="text-align:center;opacity:0.3;">
+              <div style="font-size:24px;">⬆️</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Upload</div>
+            </div>
+            <div id="stage2" style="text-align:center;opacity:0.3;">
+              <div style="font-size:24px;">🔍</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Detect</div>
+            </div>
+            <div id="stage3" style="text-align:center;opacity:0.3;">
+              <div style="font-size:24px;">📐</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Calculate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="glass" style="border-radius:16px;padding:20px;margin-top:20px;">
+        <h3 style="font-size:14px;font-weight:700;margin-bottom:12px;">📸 Recording Tips</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--muted);">
+            <span style="color:var(--accent);">→</span>
+            Film from the side (perpendicular to direction of travel)
+          </div>
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--muted);">
+            <span style="color:var(--accent);">→</span>
+            Camera at chest height, 8–12 feet away
+          </div>
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--muted);">
+            <span style="color:var(--accent);">→</span>
+            Full body must be visible at all times
+          </div>
+          <div style="display:flex;gap:8px;font-size:13px;color:var(--muted);">
+            <span style="color:var(--accent);">→</span>
+            Good lighting — avoid backlit areas
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: DASHBOARD
+═══════════════════════════════════════ -->
+<div id="page-dashboard" class="page" style="padding-top:64px;">
+  <div style="min-height:100vh;padding:60px 24px;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  margin-bottom:32px;">
+        <div>
+          <h1 style="font-size:32px;font-weight:900;margin:0 0 4px;">Dashboard</h1>
+          <p style="color:var(--muted);margin:0;">Welcome back! Here's your progress.</p>
+        </div>
+        <button onclick="showPage('upload')"
+          style="padding:10px 20px;background:var(--accent);border:none;
+                 border-radius:10px;color:#fff;font-weight:600;cursor:pointer;">
+          + New Analysis
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);
+                  gap:16px;margin-bottom:24px;">
+        <div class="glass" style="border-radius:16px;padding:20px;">
+          <div style="font-size:32px;font-weight:900;color:var(--accent);">12</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;">Total Sessions</div>
+          <div style="font-size:12px;color:var(--success);margin-top:4px;">↑ 3 this week</div>
+        </div>
+        <div class="glass" style="border-radius:16px;padding:20px;">
+          <div style="font-size:32px;font-weight:900;color:#fbbf24;">84</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;">Avg Form Score</div>
+          <div style="font-size:12px;color:var(--success);margin-top:4px;">↑ +6 this month</div>
+        </div>
+        <div class="glass" style="border-radius:16px;padding:20px;">
+          <div style="font-size:32px;font-weight:900;color:#a78bfa;">3</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;">Skills Analyzed</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">BHS • RO • Handstand</div>
+        </div>
+        <div class="glass" style="border-radius:16px;padding:20px;">
+          <div style="font-size:32px;font-weight:900;color:var(--success);">91</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;">Best Score</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Handstand</div>
+        </div>
+      </div>
+
+      <!-- Recent Sessions -->
+      <div class="glass" style="border-radius:20px;padding:24px;">
+        <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">Recent Sessions</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div onclick="showPage('analysis')"
+            style="display:flex;align-items:center;justify-content:space-between;
+                   padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;
+                   cursor:pointer;transition:background 0.2s;"
+            onmouseover="this.style.background='rgba(255,255,255,0.06)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+            <div style="display:flex;align-items:center;gap:16px;">
+              <div style="width:40px;height:40px;background:rgba(91,141,255,0.15);
+                          border-radius:10px;display:flex;align-items:center;
+                          justify-content:center;font-size:20px;">🤸‍♀️</div>
+              <div>
+                <div style="font-weight:600;font-size:14px;">Back Handspring</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:2px;">
+                  Today, 2:34 PM
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:24px;font-weight:900;color:#fbbf24;">87</div>
+              <div style="font-size:11px;color:var(--muted);">Score</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;
+                      padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;
+                      cursor:pointer;"
+            onmouseover="this.style.background='rgba(255,255,255,0.06)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+            <div style="display:flex;align-items:center;gap:16px;">
+              <div style="width:40px;height:40px;background:rgba(167,139,250,0.15);
+                          border-radius:10px;display:flex;align-items:center;
+                          justify-content:center;font-size:20px;">🙌</div>
+              <div>
+                <div style="font-weight:600;font-size:14px;">Handstand</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:2px;">
+                  Yesterday, 4:12 PM
+                </div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:24px;font-weight:900;color:var(--success);">91</div>
+              <div style="font-size:11px;color:var(--muted);">Score</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: KIOSK MODE (Your Design)
+═══════════════════════════════════════ -->
+<div id="page-kiosk" class="page"
+     style="background:var(--bg);min-height:100vh;display:flex;flex-direction:column;">
+
+  <div class="top-nav">
+    <div class="brand">
+      <span>4D</span> KINEMATICS
+      <span class="beta">LIVE</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;font-size:13px;color:var(--muted);">
+      <time id="current-time" datetime="">--:--</time>
+      <button class="ghost" onclick="showPage('landing')">← Exit Kiosk</button>
+    </div>
+  </div>
+
+  <div class="kiosk-wrap">
+    <div class="kiosk-header">
+      <div class="title">
+        <span style="color:var(--danger);font-size:10px;
+                     text-shadow:0 0 8px rgba(255,77,106,0.75);">●</span>
+        REAL-TIME FORM ANALYSIS
+      </div>
+      <div class="kiosk-status">RECORDING</div>
+    </div>
+
+    <div class="kiosk-body">
+      <div class="skill-card">
+        <div class="small-label">Current Skill</div>
+        <div class="skill-name">Back Handspring</div>
+        <div class="small-label">Form Score</div>
+        <div class="form-score">87</div>
+      </div>
+
+      <div class="coach-notes">
+        <h3>Coach Notes</h3>
+        <ul>
+          <li>Shoulder angle 17° closed at block</li>
+          <li>Slight elbow bend on landing</li>
+          <li>Hip alignment: Excellent</li>
+        </ul>
+        <button class="primary-btn" id="nextAthleteBtn">Next Athlete →</button>
+        <div class="lead-banner">
+          Tap "Next Athlete" when ready for the next analysis
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: AFFILIATE REVENUE
+═══════════════════════════════════════ -->
+<div id="page-affiliate" class="page" style="padding-top:64px;">
+  <div style="min-height:100vh;padding:60px 24px;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  margin-bottom:32px;">
+        <div>
+          <h1 style="font-size:32px;font-weight:900;margin:0 0 4px;">
+            Affiliate Revenue
+          </h1>
+          <p style="color:var(--muted);margin:0;">
+            Track clicks, conversions, and commissions in real-time
+          </p>
+        </div>
+        <div class="mono" style="padding:6px 14px;background:rgba(74,222,128,0.1);
+                                   border:1px solid rgba(74,222,128,0.3);
+                                   border-radius:999px;font-size:12px;color:var(--success);">
+          ● Live Tracking
+        </div>
+      </div>
+
+      <!-- Revenue Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);
+                  gap:16px;margin-bottom:24px;">
+        <div class="glass" style="border-radius:16px;padding:20px;" class="glow-green">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;
+                      letter-spacing:0.1em;margin-bottom:8px;">Total Clicks</div>
+          <div style="font-size:32px;font-weight:900;" id="clickCount">1,247</div>
+          <div style="font-size:12px;color:var(--success);margin-top:4px;">↑ 43 today</div>
+        </div>
+        <div class="glass" style="border-radius:16px;padding:20px;">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;
+                      letter-spacing:0.1em;margin-bottom:8px;">Conversions</div>
+          <div style="font-size:32px;font-weight:900;color:var(--success);">83</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">6.6% rate</div>
+        </div>
+        <div class="glass" style="border-radius:16px;padding:20px;">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;
+                      letter-spacing:0.1em;margin-bottom:8px;">Commission Earned</div>
+          <div style="font-size:32px;font-weight:900;color:#fbbf24;">$421</div>
+          <div style="font-size:12px;color:var(--success);margin-top:4px;">↑ $24 this week</div>
+        </div>
+        <div class="glass" style="border-radius:16px;padding:20px;">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;
+                      letter-spacing:0.1em;margin-bottom:8px;">Top Product</div>
+          <div style="font-size:18px;font-weight:900;">Shoulder Bands</div>
+          <div style="font-size:12px;color:var(--accent);margin-top:4px;">
+            412 clicks • $182
+          </div>
+        </div>
+      </div>
+
+      <!-- Combined Revenue -->
+      <div class="glass" style="border-radius:20px;padding:32px;margin-bottom:24px;
+           background:linear-gradient(135deg,rgba(91,141,255,0.05),rgba(74,222,128,0.03));">
+        <h3 style="font-size:18px;font-weight:700;margin-bottom:24px;">
+          💰 Revenue Overview
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+          <div style="text-align:center;">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">
+              Monthly Subscriptions (MRR)
+            </div>
+            <div style="font-size:40px;font-weight:900;color:var(--accent);">$2,847</div>
+          </div>
+          <div style="text-align:center;border-left:1px solid rgba(255,255,255,0.06);
+                      border-right:1px solid rgba(255,255,255,0.06);">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">
+              Affiliate Revenue
+            </div>
+            <div style="font-size:40px;font-weight:900;color:var(--success);">$421</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">
+              Total Revenue
+            </div>
+            <div style="font-size:40px;font-weight:900;color:#fbbf24;">$3,268</div>
+          </div>
+        </div>
+
+        <!-- Crypto wallet -->
+        <div style="margin-top:24px;padding-top:24px;
+                    border-top:1px solid rgba(255,255,255,0.06);
+                    display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:14px;font-weight:600;">💎 USDC Wallet</div>
+            <div class="mono" style="font-size:12px;color:var(--muted);margin-top:4px;">
+              0x1a2b...3c4d (Auto-settled via Stripe)
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:28px;font-weight:900;color:var(--success);">
+              3,268 USDC
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent Status -->
+      <div class="glass" style="border-radius:20px;padding:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;
+                    margin-bottom:20px;">
+          <h3 style="font-size:18px;font-weight:700;margin:0;">🤖 AI Agent Status</h3>
+          <div style="padding:4px 12px;background:rgba(74,222,128,0.1);
+                      border:1px solid rgba(74,222,128,0.3);border-radius:999px;
+                      font-size:12px;color:var(--success);">All Systems Active</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">
+          <div class="glass" style="border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">👋</div>
+            <div style="font-size:12px;font-weight:600;">Onboarding</div>
+            <div style="font-size:11px;color:var(--success);margin-top:4px;">● Running</div>
+          </div>
+          <div class="glass" style="border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">💬</div>
+            <div style="font-size:12px;font-weight:600;">Support Bot</div>
+            <div style="font-size:11px;color:var(--success);margin-top:4px;">● Running</div>
+          </div>
+          <div class="glass" style="border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">📉</div>
+            <div style="font-size:12px;font-weight:600;">Retention</div>
+            <div style="font-size:11px;color:var(--success);margin-top:4px;">● Running</div>
+          </div>
+          <div class="glass" style="border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">🎯</div>
+            <div style="font-size:12px;font-weight:600;">Gym Outreach</div>
+            <div style="font-size:11px;color:var(--success);margin-top:4px;">● Running</div>
+          </div>
+          <div class="glass" style="border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">✍️</div>
+            <div style="font-size:12px;font-weight:600;">Content Gen</div>
+            <div style="font-size:11px;color:var(--accent);margin-top:4px;">● Weekly</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYWALL MODAL -->
+<div id="paywallModal"
+  style="display:none;position:fixed;inset:0;z-index:100;
+         background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
+         align-items:center;justify-content:center;padding:24px;">
+  <div class="glass slide-up"
+    style="border-radius:24px;padding:40px;max-width:440px;width:100%;
+           text-align:center;border:1px solid rgba(91,141,255,0.3);">
+    <div style="font-size:40px;margin-bottom:16px;">🔒</div>
+    <h3 style="font-size:24px;font-weight:900;margin-bottom:12px;">
+      Unlock Full Analysis
+    </h3>
+    <p style="color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:24px;">
+      Premium members see exact joint angles, rotate the 3D skeleton,
+      scrub frame-by-frame, and get personalized drill recommendations.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:8px;
+                margin-bottom:24px;text-align:left;">
+      <div style="display:flex;gap:8px;font-size:13px;">
+        <span style="color:var(--success);">✓</span>
+        Exact angles (shoulder, hip, elbow, knee)
+      </div>
+      <div style="display:flex;gap:8px;font-size:13px;">
+        <span style="color:var(--success);">✓</span>
+        Interactive 3D skeleton rotation
+      </div>
+      <div style="display:flex;gap:8px;font-size:13px;">
+        <span style="color:var(--success);">✓</span>
+        0.5x slow motion playback
+      </div>
+      <div style="display:flex;gap:8px;font-size:13px;">
+        <span style="color:var(--success);">✓</span>
+        Unlimited video uploads
+      </div>
+    </div>
+    <button onclick="showPage('signup');closePaywall()"
+      style="width:100%;padding:14px;background:var(--accent);border:none;
+             border-radius:12px;color:#fff;font-weight:700;font-size:16px;
+             cursor:pointer;margin-bottom:12px;">
+      Upgrade — $19.99/mo
+    </button>
+    <button onclick="closePaywall()"
+      style="width:100%;padding:12px;background:transparent;border:none;
+             color:var(--muted);font-size:13px;cursor:pointer;">
+      Continue with Basic View
+    </button>
+    <p style="font-size:11px;color:rgba(148,163,184,0.5);margin-top:12px;">
+      Secured by Stripe • Cancel anytime
+    </p>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer"
+  style="position:fixed;bottom:24px;right:24px;z-index:200;
+         display:flex;flex-direction:column;gap:8px;"></div>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+// ─── KIOSK DATA (Your exact JS) ─────────────────
+const athletes = [
+  {
+    skill: "Back Handspring",
+    score: 87,
+    notes: [
+      "Shoulder angle 17° closed at block",
+      "Slight elbow bend on landing",
+      "Hip alignment: Excellent"
+    ]
+  },
+  {
+    skill: "Round Off",
+    score: 79,
+    notes: [
+      "Short heel drive on takeoff",
+      "Chest slightly dropped on landing",
+      "Great turn-over speed"
+    ]
+  },
+  {
+    skill: "Handstand",
+    score: 91,
+    notes: [
+      "Shoulder angle stacked over wrists",
+      "Minor toe flexion at finish",
+      "Line control: Outstanding"
+    ]
+  }
+];
+
+let currentAthleteIndex = 0;
+
+// DOM refs (safe — only grabbed after DOMContentLoaded)
+let timeEl, skillNameEl, formScoreEl, notesListEl, nextBtn;
+
+function updateClock() {
+  if (!timeEl) return;
+  const now = new Date();
+  const formatted = now.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+  timeEl.textContent = formatted;
+  timeEl.setAttribute("datetime", now.toISOString());
+}
+
+function renderAthlete(index) {
+  const athlete = athletes[index];
+  if (skillNameEl) skillNameEl.textContent = athlete.skill;
+  if (formScoreEl) formScoreEl.textContent = athlete.score;
+  if (notesListEl) {
+    notesListEl.innerHTML = "";
+    athlete.notes.forEach(note => {
+      const li = document.createElement("li");
+      li.textContent = note;
+      notesListEl.appendChild(li);
+    });
+  }
+}
+
+function nextAthlete() {
+  currentAthleteIndex = (currentAthleteIndex + 1) % athletes.length;
+  renderAthlete(currentAthleteIndex);
+  showToast(`✓ ${athletes[currentAthleteIndex].skill}`, 'green');
+}
+
+// ─── PAGE ROUTER ────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page-' + name);
+  if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
+
+  const nav = document.getElementById('globalNav');
+  if (nav) nav.style.display = name === 'kiosk' ? 'none' : 'block';
+
+  if (name === 'landing') setTimeout(initHeroCanvas, 100);
+  if (name === 'kiosk') {
+    // Wire up kiosk elements each time page is shown
+    timeEl = document.getElementById("current-time");
+    skillNameEl = document.querySelector(".skill-name");
+    formScoreEl = document.querySelector(".form-score");
+    notesListEl = document.querySelector(".coach-notes ul");
+    nextBtn = document.getElementById("nextAthleteBtn");
+    if (nextBtn) nextBtn.onclick = nextAthlete;
+    renderAthlete(currentAthleteIndex);
+    updateClock();
+  }
+}
+
+// ─── REEL ────────────────────────────────────────
+const reelVideos = [
+  { athlete:"Emma J.", skill:"Back Handspring", score:87, level:"Level 7",
+    thumb:"linear-gradient(135deg,#667eea,#764ba2)" },
+  { athlete:"Sophia M.", skill:"Round Off", score:91, level:"Level 8",
+    thumb:"linear-gradient(135deg,#f093fb,#f5576c)" },
+  { athlete:"Mia K.", skill:"Handstand", score:94, level:"Elite",
+    thumb:"linear-gradient(135deg,#4facfe,#00f2fe)" },
+  { athlete:"Olivia R.", skill:"Front Tuck", score:82, level:"Level 6",
+    thumb:"linear-gradient(135deg,#43e97b,#38f9d7)" },
+  { athlete:"Ava L.", skill:"Layout", score:89, level:"Level 9",
+    thumb:"linear-gradient(135deg,#fa709a,#fee140)" },
+  { athlete:"Isabella T.", skill:"Aerial", score:85, level:"Level 8",
+    thumb:"linear-gradient(135deg,#30cfd0,#330867)" },
+];
+
+function initReel() {
+  const track = document.getElementById('reelTrack');
+  if (!track) return;
+  [...reelVideos, ...reelVideos].forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'reel-card';
+    card.innerHTML = `
+      <div class="video-thumbnail" style="background:${v.thumb}">
+        <div class="play-overlay">
+          <div style="width:56px;height:56px;background:rgba(255,255,255,0.2);
+                      border-radius:50%;display:flex;align-items:center;
+                      justify-content:center;">
+            <svg width="28" height="28" fill="white" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:12px;left:12px;right:12px;">
+          <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">
+            ${v.level}
+          </div>
+          <div style="font-weight:700;color:#fff;margin-bottom:4px;">${v.skill}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:12px;color:rgba(255,255,255,0.6);">${v.athlete}</span>
+            <span style="padding:2px 8px;background:rgba(251,191,36,0.9);
+                         border-radius:4px;font-size:12px;font-weight:900;
+                         color:#0f172a;">${v.score}</span>
+          </div>
+        </div>
+      </div>`;
+    card.onclick = () => showToast(`🎬 Playing ${v.athlete}'s ${v.skill}`);
+    track.appendChild(card);
+  });
+}
+
+// ─── HERO CANVAS ────────────────────────────────
+const CONNECTIONS = [
+  [11,12],[11,13],[13,15],[12,14],[14,16],
+  [11,23],[12,24],[23,24],
+  [23,25],[25,27],[24,26],[26,28],
+  [0,11],[0,12],
+];
+
+function genPose(t) {
+  const p = t % 1;
+  return {
+    0:  [320,60],
+    11: [300+Math.sin(p*Math.PI*2)*20, 180+Math.cos(p*Math.PI)*30],
+    12: [340+Math.sin(p*Math.PI*2)*20, 180+Math.cos(p*Math.PI)*30],
+    13: [270+Math.sin(p*Math.PI*2)*30, 230],
+    14: [370+Math.sin(p*Math.PI*2)*30, 230],
+    15: [250, 290+Math.sin(p*Math.PI*2)*20],
+    16: [390, 290+Math.sin(p*Math.PI*2)*20],
+    23: [305, 310+Math.sin(p*Math.PI)*10],
+    24: [335, 310+Math.sin(p*Math.PI)*10],
+    25: [285,390], 26:[355,390],
+    27: [270,460], 28:[370,460],
+  };
+}
+
+let heroT = 0, heroRAF;
+function initHeroCanvas() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const sx = canvas.width/640, sy = canvas.height/520;
+    ctx.save(); ctx.scale(sx, sy);
+
+    const pose = genPose(heroT);
+
+    ctx.lineWidth = 3;
+    CONNECTIONS.forEach(([a,b]) => {
+      if (!pose[a]||!pose[b]) return;
+      const err = a===11||a===13||b===11||b===13;
+      ctx.strokeStyle = err ? 'rgba(239,68,68,0.85)' : 'rgba(91,141,255,0.75)';
+      ctx.beginPath();
+      ctx.moveTo(pose[a][0],pose[a][1]);
+      ctx.lineTo(pose[b][0],pose[b][1]);
+      ctx.stroke();
+    });
+
+    Object.entries(pose).forEach(([i,[x,y]]) => {
+      const err = i==11||i==13;
+      ctx.beginPath(); ctx.arc(x,y,err?7:5,0,Math.PI*2);
+      ctx.fillStyle = err ? '#ef4444' : '#5b8dff';
+      ctx.fill();
+    });
+
+    // Grid
+    ctx.strokeStyle = 'rgba(91,141,255,0.06)';
+    ctx.lineWidth = 1;
+    for(let i=0;i<640;i+=60){
+      ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,520);ctx.stroke();
+    }
+    for(let j=0;j<520;j+=60){
+      ctx.beginPath();ctx.moveTo(0,j);ctx.lineTo(640,j);ctx.stroke();
+    }
+
+    ctx.restore();
+    heroT += 0.003;
+    heroRAF = requestAnimationFrame(draw);
+  }
+
+  if (heroRAF) cancelAnimationFrame(heroRAF);
+  draw();
+}
+
+// ─── UPLOAD SIMULATION ──────────────────────────
+function simulateUpload() {
+  document.getElementById('uploadZone').style.display = 'none';
+  document.getElementById('processingState').style.display = 'block';
+
+  const stages = [
+    { label:'Uploading to Supabase Storage...', pct:30, s:1 },
+    { label:'Generating signed URL...', pct:45, s:1 },
+    { label:'Triggering MediaPipe worker...', pct:55, s:2 },
+    { label:'Detecting 33 landmarks...', pct:72, s:2 },
+    { label:'Calculating joint angles...', pct:88, s:3 },
+    { label:'Generating AI insights...', pct:96, s:3 },
+    { label:'Complete!', pct:100, s:3 },
+  ];
+
+  let i = 0;
+  const bar = document.getElementById('uploadProgressBar');
+  const lbl = document.getElementById('progressLabel');
+
+  const interval = setInterval(() => {
+    if (i >= stages.length) {
+      clearInterval(interval);
+      setTimeout(() => showPage('analysis'), 600);
+      return;
+    }
+    const st = stages[i];
+    bar.style.width = st.pct + '%';
+    lbl.textContent = st.label + ' ' + st.pct + '%';
+    for(let x=1;x<=3;x++){
+      const el = document.getElementById('stage'+x);
+      if(el) el.style.opacity = x <= st.s ? '1' : '0.3';
+    }
+    i++;
+  }, 500);
+}
+
+// ─── SIGN UP TABS ────────────────────────────────
+function showSignupTab(type) {
+  document.querySelectorAll('.signup-form').forEach(f => f.style.display = 'none');
+  const form = document.getElementById('form-' + type);
+  if (form) form.style.display = 'block';
+
+  ['athlete','coach','gym'].forEach(t => {
+    const btn = document.getElementById('tab-' + t);
+    if (!btn) return;
+    if (t === type) {
+      btn.style.background = 'var(--accent)';
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--muted)';
+    }
+  });
+}
+
+function handleSignup(e, type) {
+  e.preventDefault();
+  showToast(`✓ ${type} account created! Redirecting...`, 'green');
+  setTimeout(() => showPage('upload'), 1200);
+}
+
+// ─── PAYWALL ────────────────────────────────────
+function showPaywall() {
+  const m = document.getElementById('paywallModal');
+  m.style.display = 'flex';
+}
+function closePaywall() {
+  const m = document.getElementById('paywallModal');
+  m.style.display = 'none';
+}
+
+// ─── AFFILIATE CLICK ────────────────────────────
+let clickCount = 1247;
+function trackClick(product) {
+  clickCount++;
+  const el = document.getElementById('clickCount');
+  if (el) el.textContent = clickCount.toLocaleString();
+  showToast(`✓ Click tracked: ${product}`, 'green');
+}
+
+// ─── TOAST ──────────────────────────────────────
+function showToast(msg, color='blue') {
+  const colors = {
+    blue: { bg:'rgba(91,141,255,0.1)', border:'rgba(91,141,255,0.3)', text:'#93c5fd' },
+    green:{ bg:'rgba(74,222,128,0.1)', border:'rgba(74,222,128,0.3)', text:'#86efac' },
+  };
+  const c = colors[color] || colors.blue;
+  const t = document.createElement('div');
+  t.className = 'slide-up';
+  t.style.cssText = `
+    background:${c.bg};border:1px solid ${c.border};color:${c.text};
+    border-radius:10px;padding:10px 16px;font-size:13px;
+    max-width:280px;backdrop-filter:blur(12px);
+  `;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ─── INIT ────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  initHeroCanvas();
+  initReel();
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Live activity toasts
+  const events = [
+    '🤸‍♀️ New analysis: Back Handspring — Score 84',
+    '💳 New Premium subscriber joined!',
+    '📧 Onboarding agent emailed 3 users',
+    '🎯 Gym outreach: Sunrise Gymnastics contacted',
+    '💰 Affiliate: Shoulder Bands → $2.40',
+  ];
+  let ei = 0;
+  setInterval(() => {
+    showToast(events[ei++ % events.length], 'green');
+  }, 8000);
+});
+</script>
+</body>
+</html>

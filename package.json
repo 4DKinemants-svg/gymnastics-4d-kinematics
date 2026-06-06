@@ -1,0 +1,21 @@
+{
+  "name": "gymnastics-4d-kinematics",
+  "version": "1.0.0",
+  "description": "AI-powered gymnastics form analysis",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build needed'",
+    "lint": "echo 'No linter configured for static HTML'"
+  },
+  "keywords": [
+    "gymnastics",
+    "ai",
+    "kinematics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
